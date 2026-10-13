@@ -1,26 +1,41 @@
 ```html
 <!doctype html>
-<html>
-<head><meta charset="utf-8"><title>Cancri-SP diagnostic</title></head>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cancri-SP Diagnostic</title>
+</head>
 <body>
-<h2>Cancri-SP diagnostic</h2>
-<pre id="out">Checking browser debugging access...</pre>
-<script>
-const out = document.getElementById("out");
+  <h2>Cancri-SP Diagnostic</h2>
+  <pre id="status">Page loaded.</pre>
 
-async function run() {
-  try {
-    const r = await fetch(
-      "http://localhost:9222/json/version"
-    );
-    const data = await r.json();
-    out.textContent = JSON.stringify(data, null, 2);
-  } catch (e) {
-    out.textContent = "DevTools check failed: " + e.message;
-  }
-}
-run();
-</script>
+  <script src="/cancri-sp-test/mojojs/mojo_bindings.js"></script>
+  <script src="/cancri-sp-test/mojojs/gen/third_party/blink/public/mojom/otter/otter_broker.mojom.js"></script>
+
+  <script>
+    const status = document.getElementById("status");
+
+    status.textContent =
+      "Page loaded.\n" +
+      "Origin: " + location.origin + "\n" +
+      "Protocol: " + location.protocol + "\n" +
+      "Checking Mojo bindings...";
+
+    window.addEventListener("error", (event) => {
+      status.textContent += "\nError: " + event.message;
+    });
+
+    window.addEventListener("unhandledrejection", (event) => {
+      status.textContent += "\nPromise error: " + event.reason;
+    });
+
+    window.addEventListener("load", () => {
+      status.textContent +=
+        "\nMojo: " + typeof Mojo +
+        "\nBindings: " + typeof blink;
+    });
+  </script>
 </body>
 </html>
 ```
