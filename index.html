@@ -3,38 +3,19 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Cancri-SP Diagnostic</title>
 </head>
 <body>
-  <h2>Cancri-SP Diagnostic</h2>
-  <pre id="status">Page loaded.</pre>
-
-  <script src="/cancri-sp-test/mojojs/mojo_bindings.js"></script>
-  <script src="/cancri-sp-test/mojojs/gen/third_party/blink/public/mojom/otter/otter_broker.mojom.js"></script>
+  <h2>Cancri-SP diagnostic</h2>
+  <pre id="status">Page loaded successfully.</pre>
 
   <script>
-    const status = document.getElementById("status");
-
-    status.textContent =
-      "Page loaded.\n" +
+    document.getElementById("status").textContent =
+      "Page loaded successfully.\n" +
       "Origin: " + location.origin + "\n" +
       "Protocol: " + location.protocol + "\n" +
-      "Checking Mojo bindings...";
-
-    window.addEventListener("error", (event) => {
-      status.textContent += "\nError: " + event.message;
-    });
-
-    window.addEventListener("unhandledrejection", (event) => {
-      status.textContent += "\nPromise error: " + event.reason;
-    });
-
-    window.addEventListener("load", () => {
-      status.textContent +=
-        "\nMojo: " + typeof Mojo +
-        "\nBindings: " + typeof blink;
-    });
+      "Mojo available: " + (typeof Mojo !== "undefined") + "\n" +
+      "Blink available: " + (typeof blink !== "undefined");
   </script>
 </body>
 </html>
