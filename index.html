@@ -1,11 +1,26 @@
-<!DOCTYPE html>
+```html
+<!doctype html>
 <html>
-<head>
-  <meta charset="UTF-8">
-  <title>Cancri-SP Test</title>
-</head>
+<head><meta charset="utf-8"><title>Cancri-SP diagnostic</title></head>
 <body>
-  <h1>Cancri-SP Test Page</h1>
-  <p>GitHub Pages is working.</p>
+<h2>Cancri-SP diagnostic</h2>
+<pre id="out">Checking browser debugging access...</pre>
+<script>
+const out = document.getElementById("out");
+
+async function run() {
+  try {
+    const r = await fetch(
+      "http://localhost:9222/json/version"
+    );
+    const data = await r.json();
+    out.textContent = JSON.stringify(data, null, 2);
+  } catch (e) {
+    out.textContent = "DevTools check failed: " + e.message;
+  }
+}
+run();
+</script>
 </body>
 </html>
+```
