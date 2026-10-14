@@ -1,22 +1,12 @@
-```html
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Cancri-SP Diagnostic</title>
-</head>
-<body>
-  <h2>Cancri-SP diagnostic</h2>
-  <pre id="status">Page loaded successfully.</pre>
 
-  <script>
-    document.getElementById("status").textContent =
-      "Page loaded successfully.\n" +
-      "Origin: " + location.origin + "\n" +
-      "Protocol: " + location.protocol + "\n" +
-      "Mojo available: " + (typeof Mojo !== "undefined") + "\n" +
-      "Blink available: " + (typeof blink !== "undefined");
-  </script>
+<!doctype html>
+<html>
+<body>
+<h2>Cancri-SP page test</h2>
+<pre id="status">Page loaded.</pre>
+<script>
+document.getElementById("status").textContent =
+  "Updated page loaded successfully at " + new Date().toISOString();
+</script>
 </body>
 </html>
-```
