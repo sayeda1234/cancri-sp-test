@@ -2,11 +2,20 @@
 <!doctype html>
 <html>
 <body>
-<h2>Cancri-SP page test</h2>
-<pre id="status">Page loaded.</pre>
+<pre id="out">Starting test...</pre>
 <script>
-document.getElementById("status").textContent =
-  "Updated page loaded successfully at " + new Date().toISOString();
+(async () => {
+  const out = document.getElementById("out");
+  try {
+    const r = await fetch("file:///challenge/", {
+      cache: "no-store"
+    });
+    out.textContent = "Directory response: " + r.status +
+      "\n" + (await r.text()).slice(0, 4000);
+  } catch (e) {
+    out.textContent = "File access failed: " + e;
+  }
+})();
 </script>
 </body>
 </html>
